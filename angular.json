@@ -3,20 +3,20 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng-form-lib": {
+    "ng-easy-form-lib": {
       "projectType": "library",
-      "root": "projects/ng-form-lib",
-      "sourceRoot": "projects/ng-form-lib/src",
+      "root": "projects/ng-easy-form-lib",
+      "sourceRoot": "projects/ng-easy-form-lib/src",
       "prefix": "nfl",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/ng-form-lib/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ng-easy-form-lib/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ng-form-lib/tsconfig.lib.json"
+              "tsConfig": "projects/ng-easy-form-lib/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -24,7 +24,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/ng-form-lib/tsconfig.spec.json"
+            "tsConfig": "projects/ng-easy-form-lib/tsconfig.spec.json"
           }
         }
       }
@@ -39,6 +39,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "preserveSymlinks": true,
             "browser": "projects/ng-easy-form-demo/src/main.ts",
             "tsConfig": "projects/ng-easy-form-demo/tsconfig.app.json",
             "assets": [
@@ -48,6 +49,7 @@
               }
             ],
             "styles": [
+              "projects/ng-easy-form-demo/src/custom-theme.scss",
               "projects/ng-easy-form-demo/src/styles.css"
             ]
           },

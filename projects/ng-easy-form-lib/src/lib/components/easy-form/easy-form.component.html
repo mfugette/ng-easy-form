@@ -1,0 +1,270 @@
+<div class="easy-form" [formGroup]="form()">
+  @for (row of rows(); track row.rowIndex) {
+  <div class="easy-row" [style.grid-template-columns]="'repeat(' + row.fields.length + ', 1fr)'">
+    @for (field of row.fields; track field.label; let last = $last) {
+    <div class="easy-col">
+
+      <!-- ── TEXT / EMAIL / PASSWORD / NUMBER / TEL / URL ── -->
+      @if (isType(field, 'input', 'email', 'password', 'tel', 'url')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        @if (field.prefixIcon) {
+        <mat-icon matPrefix>{{ field.prefixIcon }}</mat-icon>
+        }
+        @if (field.prefixText) {
+        <span matPrefix>{{ field.prefixText }}</span>
+        }
+        <input matInput [type]="field.fieldType === 'input' ? 'text' : field.fieldType"
+          [formControlName]="getControlName(field)" [placeholder]="field.placeholder" />
+        @if (field.suffixIcon) {
+        <mat-icon matSuffix>{{ field.suffixIcon }}</mat-icon>
+        }
+        @if (field.suffixText) {
+        <span matSuffix>{{ field.suffixText }}</span>
+        }
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── NUMBER ── -->
+      @if (isType(field, 'number')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        @if (field.prefixIcon) {
+        <mat-icon matPrefix>{{ field.prefixIcon }}</mat-icon>
+        }
+        @if (field.prefixText) {
+        <span matPrefix>{{ field.prefixText }}</span>
+        }
+        <input matInput type="number" [formControlName]="getControlName(field)" [placeholder]="field.placeholder" />
+        <div matSuffix class="easy-number-controls">
+          <button mat-icon-button type="button" [disabled]="field.disabled" (mousedown)="$event.preventDefault()"
+            (click)="stepNumber(getControlName(field), 1)">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+          </button>
+          <button mat-icon-button type="button" [disabled]="field.disabled" (mousedown)="$event.preventDefault()"
+            (click)="stepNumber(getControlName(field), -1)">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+        </div>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── TEXTAREA ── -->
+      @if (isType(field, 'textarea')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        @if (field.prefixIcon) {
+        <mat-icon matPrefix>{{ field.prefixIcon }}</mat-icon>
+        }
+        <textarea matInput [formControlName]="getControlName(field)" [placeholder]="field.placeholder"
+          [rows]="field.textareaRows"></textarea>
+        @if (field.suffixIcon) {
+        <mat-icon matSuffix>{{ field.suffixIcon }}</mat-icon>
+        }
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── SELECT ── -->
+      @if (isType(field, 'select')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        @if (field.prefixIcon) {
+        <mat-icon matPrefix>{{ field.prefixIcon }}</mat-icon>
+        }
+        <mat-select [formControlName]="getControlName(field)">
+          @for (opt of field.options; track opt.key) {
+          <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
+          }
+        </mat-select>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── MULTISELECT ── -->
+      @if (isType(field, 'multiselect')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select [formControlName]="getControlName(field)" multiple>
+          @for (opt of field.options; track opt.key) {
+          <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
+          }
+        </mat-select>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── AUTOCOMPLETE ── -->
+      @if (isType(field, 'autocomplete')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        @if (field.prefixIcon) {
+        <mat-icon matPrefix>{{ field.prefixIcon }}</mat-icon>
+        }
+        <input matInput [formControlName]="getControlName(field)" [placeholder]="field.placeholder"
+          [matAutocomplete]="auto" />
+        @if (field.suffixIcon) {
+        <mat-icon matSuffix>{{ field.suffixIcon }}</mat-icon>
+        }
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="getDisplayFn(field)">
+          <cdk-virtual-scroll-viewport itemSize="48" class="easy-autocomplete-viewport">
+            <mat-option *cdkVirtualFor="let opt of getFilteredOptions(getControlName(field))()" [value]="opt.key">
+              {{ opt.value }}
+            </mat-option>
+          </cdk-virtual-scroll-viewport>
+        </mat-autocomplete>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- Future Work -->
+      <!-- @if (isType(field, 'multi-autocomplete')) {
+      <easy-multi-autocomplete [field]="field" [controlName]="getControlName(field)" [form]="form()" />
+      }
+
+      @if (isType(field, 'datetime')) {
+      <easy-datetime-picker [field]="field" [controlName]="getControlName(field)" [form]="form()" />
+      } -->
+
+      <!-- ── DATE ── -->
+      @if (isType(field, 'date')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput [matDatepicker]="picker" [formControlName]="getControlName(field)"
+          [placeholder]="field.placeholder" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── TIME ── -->
+      @if (isType(field, 'time')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput [formControlName]="getControlName(field)" [placeholder]="field.placeholder || 'HH:MM'"
+          [matAutocomplete]="timePicker" (focus)="onTimeFocus(getControlName(field))"
+          (input)="onTimeInput($event, getControlName(field))" class="easy-time-input" />
+        <mat-icon matSuffix>schedule</mat-icon>
+        <mat-autocomplete #timePicker="matAutocomplete">
+          @for (t of getFilteredTimes(getControlName(field))(); track t) {
+          <mat-option [value]="t">{{ t }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <!-- ── CHECKBOX ── -->
+      @if (isType(field, 'checkbox')) {
+      <div class="easy-checkbox-wrapper">
+        <mat-checkbox [formControlName]="getControlName(field)">
+          {{ field.label }}
+        </mat-checkbox>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </div>
+      }
+
+      <!-- ── TOGGLE ── -->
+      @if (isType(field, 'toggle')) {
+      <div class="easy-toggle-wrapper">
+        <mat-slide-toggle [formControlName]="getControlName(field)">
+          {{ field.label }}
+        </mat-slide-toggle>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </div>
+      }
+
+      <!-- ── RADIO ── -->
+      <!-- @if (isType(field, 'radio')) {
+      <div class="easy-radio-wrapper">
+        <label class="easy-radio-label">{{ field.label }}</label>
+        <mat-radio-group [formControlName]="getControlName(field)" class="easy-radio-group">
+          @for (opt of field.options; track opt.key) {
+          <mat-radio-button [value]="opt.key">{{ opt.value }}</mat-radio-button>
+          }
+        </mat-radio-group>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </div>
+      } -->
+
+      <!-- ── COLOR ── -->
+      @if (isType(field, 'color')) {
+      <mat-form-field [appearance]="field.appearance" class="easy-field" subscriptSizing="dynamic">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput [formControlName]="getControlName(field)" [placeholder]="field.placeholder || '#000000'"
+          (input)="onColorTextInput($event, getControlName(field))" />
+        <span matSuffix class="easy-color-suffix">
+          <input type="color" [value]="form().controls[getControlName(field)]?.value || '#000000'"
+            (input)="onColorPickerInput($event, getControlName(field))" class="easy-color-picker" />
+        </span>
+        @if (field.hint && !field.getErrorMessage()) {
+        <mat-hint [align]="field.hintAlign">{{ field.hint }}</mat-hint>
+        }
+        @if (field.getErrorMessage()) {
+        <mat-error>{{ field.getErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

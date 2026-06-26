@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgFormLib } from './ng-form-lib';
+import { NgEasyFormLib } from './ng-easy-form-lib';
 
 describe('NgFormLib', () => {
-  let component: NgFormLib;
-  let fixture: ComponentFixture<NgFormLib>;
+  let component: NgEasyFormLib;
+  let fixture: ComponentFixture<NgEasyFormLib>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgFormLib]
+      imports: [NgEasyFormLib]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NgFormLib);
+    fixture = TestBed.createComponent(NgEasyFormLib);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
