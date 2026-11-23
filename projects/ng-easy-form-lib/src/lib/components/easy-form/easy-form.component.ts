@@ -29,7 +29,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatPseudoCheckboxModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTimepicker, MatTimepickerModule } from '@angular/material/timepicker';
-import { LOCALE_ID } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -67,7 +66,6 @@ export interface FormRow {
     MatMenuModule,
     MatTooltipModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'en-GB' }],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './easy-form.component.html',
   styleUrl: './easy-form.component.css',

@@ -1,11 +1,32 @@
 {
   "name": "ng-easy-form-lib",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Build Angular Material forms from a schema object.",
+  "license": "MIT",
+  "author": "Maxwell Fugette",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfugette/ng-easy-form.git"
+  },
+  "homepage": "https://github.com/mfugette/ng-easy-form#readme",
+  "bugs": {
+    "url": "https://github.com/mfugette/ng-easy-form/issues"
+  },
+  "keywords": [
+    "angular",
+    "angular-material",
+    "forms",
+    "reactive-forms",
+    "form-builder",
+    "dynamic-forms"
+  ],
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
     "@angular/material": "^20.0.0",
-    "@angular/cdk": "^20.0.0"
+    "@angular/cdk": "^20.0.0",
+    "rxjs": "^7.8.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
